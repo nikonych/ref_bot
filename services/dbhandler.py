@@ -150,35 +150,41 @@ def create_dbx():
         if len(con.execute("PRAGMA table_info(users)").fetchall()) == 20:
             print("All db was found")
         else:
-            con.execute("DROP TABLE users")
-            con.execute("CREATE TABLE users("
-                        "user_id INTEGER PRIMARY KEY ,"
-                        "user_login TEXT,"
-                        "weekcolds INTEGER default 0,"
-                        "monthcolds INTEGER default 0,"
-                        "allcolds INTEGER default 0,"
-                        "lastbuild INTEGER default 0)")
-            print("DB was not found(1) | Creating...")
+            try:
+                con.execute("DROP TABLE users")
+            finally:
+                con.execute("CREATE TABLE users("
+                            "user_id INTEGER PRIMARY KEY ,"
+                            "user_login TEXT,"
+                            "user_name Text,"
+                            ""
+                            "monthcolds INTEGER default 0,"
+                            "allcolds INTEGER default 0,"
+                            "lastbuild INTEGER default 0)")
+                print("DB was not found(1) | Creating...")
 
             # Создание БД с хранением данных настроек
         if len(con.execute("PRAGMA table_info(settings)").fetchall()) == 7:
             print("DB was found(2)")
         else:
             # con.execute("DROP TABLE settings")
-            con.execute("CREATE TABLE settings("
-                        "botlogchat INTEGER default 0,"
-                        "logchat INTEGER default 0,"
-                        "adminchat INTEGER default 0,"
-                        "otrabchat INTEGER default 0,"
-                        "profitchat INTEGER default 0,"
-                        "workerchat INTEGER default 0,"
-                        "newschat INTEGER default 0)")
+            try:
+                con.execute("DROP TABLE users")
+            finally:
+                con.execute("CREATE TABLE settings("
+                            "botlogchat INTEGER default 0,"
+                            "logchat INTEGER default 0,"
+                            "adminchat INTEGER default 0,"
+                            "otrabchat INTEGER default 0,"
+                            "profitchat INTEGER default 0,"
+                            "workerchat INTEGER default 0,"
+                            "newschat INTEGER default 0)")
 
-            con.execute("INSERT INTO settings("
-                        "botlogchat) "
-                        "VALUES (?)",
-                        [0])
-            print("DB was not found(2) | Creating...")
+                con.execute("INSERT INTO settings("
+                            "botlogchat) "
+                            "VALUES (?)",
+                            [0])
+                print("DB was not found(2) | Creating...")
 
 
             #
