@@ -4,7 +4,7 @@ import random
 import sqlite3
 
 from data.config import DATABASE_PATH
-from utils.const_functions import get_unix, get_date, clear_html
+
 
 
 # Преобразование полученного списка в словарь
@@ -53,7 +53,7 @@ def add_userx(user_id, user_login, user_name):
         con.execute("INSERT INTO users "
                     "(user_id, user_login, user_name, user_date) "
                     "VALUES (?, ?, ?, ?)",
-                    [user_id, user_login, user_name, get_date()])
+                    [user_id, user_login, user_name, 123])
         con.commit()
 
 
@@ -147,21 +147,17 @@ def create_dbx():
         con.row_factory = dict_factory
 
         # Создание БД с хранением данных пользователей
-        if len(con.execute("PRAGMA table_info(users)").fetchall()) == 20:
+        if len(con.execute("PRAGMA table_info(users)").fetchall()) == 6:
             print("All db was found")
         else:
-            try:
-                con.execute("DROP TABLE users")
-            finally:
-                con.execute("CREATE TABLE users("
-                            "user_id INTEGER PRIMARY KEY ,"
-                            "user_login TEXT,"
-                            "user_name Text,"
-                            ""
-                            "monthcolds INTEGER default 0,"
-                            "allcolds INTEGER default 0,"
-                            "lastbuild INTEGER default 0)")
-                print("DB was not found(1) | Creating...")
+            con.execute("CREATE TABLE users("
+                        "user_id INTEGER PRIMARY KEY ,"
+                        "user_login TEXT,"
+                        "user_name Text,"
+                        "monthcolds INTEGER default 0,"
+                        "allcolds INTEGER default 0,"
+                        "lastbuild INTEGER default 0)")
+            print("DB was not found(1) | Creating...")
 
             # Создание БД с хранением данных настроек
         if len(con.execute("PRAGMA table_info(settings)").fetchall()) == 7:
@@ -185,18 +181,5 @@ def create_dbx():
                             "VALUES (?)",
                             [0])
                 print("DB was not found(2) | Creating...")
-
-
-            #
-            # if len(con.execute("PRAGMA table_info(storage_subcategory)").fetchall()) == 4:
-            #     print("DB was found(11)")
-            # else:
-            #     con.execute("create table storage_subcategory("
-            #                 "increment integer,"
-            #                 "subcategory_id integer,"
-            #                 "subcategory_name text,"
-            #                 "category_id integer"
-            #                 ")")
-            #     print("DB was not found(11) | Creating...")
 
         con.commit()

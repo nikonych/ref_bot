@@ -2,7 +2,6 @@
 import logging as bot_logger
 import os
 import sys
-from datetime import datetime
 
 import colorama
 from aiogram import executor, Dispatcher
@@ -11,9 +10,9 @@ from colorama import Fore
 
 from handlers import dp
 from loader import scheduler
-from services.api_session import RequestsSession
+
 from middlewares import setup_middlewares
-from services.dbhandler import create_dbx
+from data.dbhandler import create_dbx
 # from utils.misc_functions import update_logs_day, update_logs_week, update_logs_month
 
 colorama.init()
@@ -29,7 +28,6 @@ colorama.init()
 # Выполнение функции после запуска бота
 async def on_startup(dp: Dispatcher):
     await dp.bot.get_updates(offset=-1)
-    dp.bot['rSession'] = RequestsSession()
 
     # await scheduler_start()
 
@@ -41,8 +39,6 @@ async def on_startup(dp: Dispatcher):
 
 # Выполнение функции после выключения бота
 async def on_shutdown(dp: Dispatcher):
-    rSession: RequestsSession = dp.bot['rSession']
-    await rSession.close()
     await dp.storage.close()
     await dp.storage.wait_closed()
     await (await dp.bot.get_session()).close()
