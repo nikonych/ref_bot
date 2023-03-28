@@ -5,6 +5,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from misc.states import TokenState
 from utils.misc.kb_config import add_money_btn, empty_btn, send_proof_btn
 
 
@@ -23,12 +24,13 @@ async def sure_empty_handler(call: CallbackQuery, state: FSMContext, session: As
         await call.message.edit_caption(caption=call.message.caption.split("\n\n")[0],
                                         reply_markup=keyboard)
     else:
-        with open("database/settings.json", "r") as read_file:
-            data = json.load(read_file)
-        messages_id = (await state.get_data()).get("messages_id")
-        for m_id in messages_id:
-            await bot.delete_message(chat_id=data['chat_id'], message_id=m_id)
-        await bot.send_message(chat_id=user_id, text="Ваши токены оказались пустыми!")
-        await call.message.edit_caption(caption=call.message.caption.split("\n\n")[0] + "\n\n"
-                                                                                        "Файл пустой")
-        # await call.message.edit_reply_markup(reply_markup=None)
+        if check_type == "no":
+            await bot.send_message(chat_id=user_id, text="✅ Ваши токены успешно отработаны!\n"
+                                                         "❌ К сожелению ваши токены оказались не валидными, или пустыми!")
+            await call.message.edit_caption(caption=call.message.caption.split("\n\n")[0] + "\n"
+                                                                                            "❌ Файл пустой")
+        else:
+            msg = await call.message.answer("📁 Прикрепите скриншот отчета отработки токенов!")
+            await state.update_data(messages_id=[msg.message_id])
+            await state.update_data(is_empty=True)
+            await state.set_state(TokenState.proof)

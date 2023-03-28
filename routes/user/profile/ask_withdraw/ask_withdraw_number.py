@@ -9,7 +9,7 @@ from misc.states import TokenState, WithdrawState
 
 async def ask_withdraw_number_handler(message: Message, state: FSMContext, session: AsyncSession):
 
-    await message.answer("Введите сумму для вывода:")
+    await message.answer("💳 Введите сумму для вывода:")
     await state.update_data(number=message.text)
     await state.set_state(WithdrawState.money)
 

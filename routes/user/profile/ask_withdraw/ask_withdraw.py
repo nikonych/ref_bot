@@ -15,12 +15,11 @@ async def ask_withdraw_handler(call: CallbackQuery, state: FSMContext, session: 
     await state.update_data(type=type)
     match type:
         case 'qiwi':
-            await message.edit_text("Введите номер QIWI кошелька:\n"
-                                    "Пример: 79001234567")
+            await message.edit_text("🥝 Введите номер QIWI кошелька:\n"
+                                    "⚠️ Пример: 79001234567")
             await state.set_state(WithdrawState.number)
         case 'lzt':
-            await message.edit_text("Введите постоянную ссылку на ваш профиль:\n"
-                                    "Настройки профиля - Адрес профиля")
+            await message.edit_text("🔗 Введите ссылку на ваш профиль форума LZT:")
             await state.set_state(WithdrawState.link)
         case 'yoomoney':
             await message.edit_text("Введите номер YooMoney кошелька:")

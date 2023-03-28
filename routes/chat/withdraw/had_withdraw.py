@@ -12,11 +12,11 @@ async def had_withdraw_handler(call: CallbackQuery, state: FSMContext, session: 
     user_id = int(call.data.split(":")[1])
     money = int(call.data.split(":")[2])
     await call.message.edit_text(call.message.text + "\n"
-                                                     "Выплачено", reply_markup=None)
+                                                     "✅ Выплачено", reply_markup=None)
 
     user_db = await DBCommands(User, session).get(user_id=user_id)
     await DBCommands(User, session).update(values=dict(wait_balance=user_db.wait_balance-int(money), withdraw_balance=user_db.withdraw_balance + int(money)), where=dict(user_id=user_id))
 
-    await bot.send_message(chat_id=user_id, text="Ваша заявка на вывод средств успешно выполнена!")
+    await bot.send_message(chat_id=user_id, text="✅ Ваша заявка на вывод средств успешно выполнена!")
 
 

@@ -12,10 +12,12 @@ from misc.states import TokenState, WithdrawState
 
 async def ask_withdraw_link_handler(message: Message, state: FSMContext, session: AsyncSession):
 
-    await message.answer("Введите ваш username:")
-    if message.text.startswith("https://zelenka.guru/members/") or message.text.startswith("https://lolz.guru/members/"):
-        await state.update_data(number=message.text.split("/")[-2])
-    await state.set_state(WithdrawState.user_name)
+    # await message.answer("Введите ваш username:")
+    await state.update_data(number=message.text)
+    # await state.set_state(WithdrawState.user_name)
+    await message.answer("Введите сумму для вывода:")
+    await state.update_data(user_name=message.text)
+    await state.set_state(WithdrawState.money)
 
 async def ask_withdraw_user_name_handler(message: Message, state: FSMContext, session: AsyncSession):
     await message.answer("Введите сумму для вывода:")

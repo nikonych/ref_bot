@@ -44,7 +44,7 @@ async def auto_withdraw(user_id, user_name, amount, call: CallbackQuery):
                                   secret_answer=data['payments']['lzt_secret'], comment="Спасибо что работаете с нами!")
         if pay.status_code == 200:
             await call.message.edit_text(call.message.text + "\n\n"
-                                                             "Выплачено", reply_markup=None)
+                                                             "✅ Выплачено", reply_markup=None)
             return True
     else:
         await call.answer("Неверный токен! Измените в админке")

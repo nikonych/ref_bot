@@ -31,7 +31,7 @@ async def auto_withdraw_handler(call: CallbackQuery, state: FSMContext, session:
                                                                        withdraw_balance=user_db.withdraw_balance + int(
                                                                            money)), where=dict(user_id=user_id))
 
-                    await bot.send_message(chat_id=user_id, text="Ваша заявка на вывод средств успешно выполнена!")
+                    await bot.send_message(chat_id=user_id, text="✅ Ваша заявка на вывод средств успешно выполнена!")
             else:
                 await call.answer("Недостаточно средств!\n"
                                   f"На балансе: {balance}₽")
@@ -47,7 +47,7 @@ async def auto_withdraw_handler(call: CallbackQuery, state: FSMContext, session:
                                                                        withdraw_balance=user_db.withdraw_balance + int(
                                                                            money)), where=dict(user_id=user_id))
 
-                    await bot.send_message(chat_id=user_id, text="Ваша заявка на вывод средств успешно выполнена!")
+                    await bot.send_message(chat_id=user_id, text="✅ Ваша заявка на вывод средств успешно выполнена!")
             else:
                 await call.answer("Недостаточно средств!\n"
                                   f"На балансе: {balance}₽")

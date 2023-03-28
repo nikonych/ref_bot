@@ -41,7 +41,10 @@ async def start_handler(upd: Union[Message, CallbackQuery], state: FSMContext, s
     with open("database/settings.json", "r") as read_file:
         data = json.load(read_file)
     img = FSInputFile('./images/main_img.jpg')
-    await message.answer_photo(img, caption=data['main_text'], reply_markup=markup)
+    if "{0}" in data['main_text']:
+        await message.answer_photo(img, caption=data['main_text'].format(message.from_user.username), reply_markup=markup)
+    else:
+        await message.answer_photo(img, caption=data['main_text'], reply_markup=markup)
     # await message.answer(data['main_text'], reply_markup=markup)
 
 
