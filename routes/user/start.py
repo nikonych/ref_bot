@@ -1,7 +1,9 @@
 import json
 from typing import Union
 
-from aiogram import types
+from aiogram import Bot
+
+import bot
 from aiogram.filters import CommandObject
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery, KeyboardButton, FSInputFile
@@ -10,6 +12,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from database.db_commands import DBCommands
 from database.models.user import User
 from config import Config
+from keyboards.user_inline import get_channels_inl
+from keyboards.user_reply import get_menu_kb, get_accept_kb
 from utils.misc.kb_config import *
 
 async def back_to_start_handler(message: Message, state: FSMContext, session: AsyncSession, config: Config):
@@ -19,43 +23,64 @@ async def back_to_start_handler(message: Message, state: FSMContext, session: As
 
 
 
-async def start_handler(upd: Union[Message, CallbackQuery], state: FSMContext, session: AsyncSession, config: Config, command: CommandObject = None):
+async def start_handler(upd: Union[Message, CallbackQuery], state: FSMContext, session: AsyncSession, config: Config, bot: Bot):
     await state.clear()
 
     user_id = upd.from_user.id
     message = upd if isinstance(upd, Message) else upd.message
-
-    user_db = await DBCommands(User, session).get(user_id=user_id)
-    if not user_db:
-        await DBCommands(User, session).add(user_id=user_id, user_name=upd.from_user.username)
-
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True,
-                                       keyboard=[
-                                           [KeyboardButton(text=load_token_btn)],
-                                           [KeyboardButton(text=profile_btn), KeyboardButton(text=rule_btn)],
-                                           [KeyboardButton(text=help_btn)]
-                                       ])
-
-    if user_id in config.tg_bot.admin_ids:
-        markup.keyboard.append([KeyboardButton(text=admin_btn)])
     with open("database/settings.json", "r") as read_file:
         data = json.load(read_file)
-    img = FSInputFile('./images/main_img.jpg')
-    if "{0}" in data['main_text']:
-        await message.answer_photo(img, caption=data['main_text'].format(message.from_user.username), reply_markup=markup)
+    user_db = await DBCommands(User, session).get(user_id=user_id)
+    if not user_db:
+        await message.answer(data["license"], reply_markup=await get_channels_inl(bot))
+        await DBCommands(User, session).add(user_id=user_id, user_name=upd.from_user.username)
+    elif not user_db.is_enabled:
+        await message.answer(data["license"], reply_markup=await get_channels_inl(bot))
     else:
-        await message.answer_photo(img, caption=data['main_text'], reply_markup=markup)
-    # await message.answer(data['main_text'], reply_markup=markup)
+        markup = get_menu_kb()
+
+
+        if user_id in config.tg_bot.admin_ids:
+            markup.keyboard.append([KeyboardButton(text=admin_btn)])
+
+        img = FSInputFile('./images/main_img.jpg')
+        if "{0}" in data['main_text']:
+            await message.answer_photo(img, caption=data['main_text'].format(message.from_user.username), reply_markup=markup)
+        else:
+            await message.answer_photo(img, caption=data['main_text'], reply_markup=markup)
 
 
 
 
 
+async def accept_license_handler(call: CallbackQuery, state: FSMContext, session: AsyncSession, config: Config, bot: Bot):
+    await state.clear()
+
+    user_id = call.from_user.id
+    with open("database/settings.json", "r") as read_file:
+        data = json.load(read_file)
+    flag = False
+    for channel in data["channels"]:
+        channel = await bot.get_chat_member(chat_id=channel, user_id=user_id)
+        if channel.status == "left":
+            flag = True
+            break
+    if flag:
+        await call.answer("Пожалуйста подпишитесь на все группы!", reply_markup=await get_channels_inl(bot))
+    else:
+        await DBCommands(User, session).update(where=dict(user_id=user_id), values=dict(is_enabled=True))
+        await call.message.delete()
+        markup = get_menu_kb()
 
 
+        if user_id in config.tg_bot.admin_ids:
+            markup.keyboard.append([KeyboardButton(text=admin_btn)])
 
-
-
+        img = FSInputFile('./images/main_img.jpg')
+        if "{0}" in data['main_text']:
+            await call.message.answer_photo(img, caption=data['main_text'].format(call.from_user.username), reply_markup=markup)
+        else:
+            await call.message.answer_photo(img, caption=data['main_text'], reply_markup=markup)
 
 
 

@@ -8,7 +8,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from database.db_commands import DBCommands
 from database.models.user import User
 from misc.states import UserState
-from utils.decoration.user_text import profile_text
 from utils.misc.kb_config import users_list_btn, find_user_btn, back_btn
 
 
@@ -32,8 +31,8 @@ async def get_user_handler(message: Message, state: FSMContext, session: AsyncSe
     user_id = message.text
     user_db = await DBCommands(User, session).get(user_id=user_id)
     if user_db != None:
-        text = profile_text.format(user_db.user_id, user_db.balance, user_db.token_count, user_db.total_balance)
-
+        # text = profile_text.format(user_db.user_id, user_db.balance, user_db.token_count, user_db.total_balance)
+        text= ''
         await message.answer(text)
     else:
         await message.answer("Пользователь не найден!")
@@ -77,7 +76,7 @@ async def select_user_handler(call: CallbackQuery, state: FSMContext, session: A
     user_id = int(call.data.split(":")[1])
     page = int(call.data.split(":")[2])
     user_db = await DBCommands(User, session).get(user_id=user_id)
-    text = profile_text.format(user_db.user_id, user_db.balance, user_db.token_count, user_db.total_balance)
-
+    # text = profile_text.format(user_db.user_id, user_db.balance, user_db.token_count, user_db.total_balance)
+    text =''
     keyboard = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text=back_btn, callback_data=f"users_list:{page}")]])
     await call.message.edit_text(text, reply_markup=keyboard)

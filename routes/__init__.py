@@ -8,7 +8,6 @@ from .chat import chat_router
 # from .admin import admin_router
 from .errors import errors_router
 from .user import user_router
-from .user.tokens import tokens_router
 
 
 def register_all_routes(dp: Dispatcher, config: Config):
