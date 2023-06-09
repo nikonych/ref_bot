@@ -4,7 +4,7 @@ from aiogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from utils.misc.kb_config import change_yoomoney_btn, check_yoomoney_btn, check_lzt_btn, change_lzt_btn, \
-    change_qiwi_btn, check_qiwi_btn
+    change_qiwi_btn, check_qiwi_btn, check_lava_btn, change_lava_btn
 
 
 async def payments_handler(message: Message, state: FSMContext, session: AsyncSession, bot: Bot):
@@ -13,6 +13,8 @@ async def payments_handler(message: Message, state: FSMContext, session: AsyncSe
          InlineKeyboardButton(text=change_qiwi_btn, callback_data="change_payment:qiwi"), ],
         [InlineKeyboardButton(text=check_lzt_btn, callback_data="check_payment:lzt"),
          InlineKeyboardButton(text=change_lzt_btn, callback_data="change_payment:lzt"), ],
+        [InlineKeyboardButton(text=check_lava_btn, callback_data="check_payment:lava"),
+         InlineKeyboardButton(text=change_lava_btn, callback_data="change_payment:lava"), ],
         # [InlineKeyboardButton(text=check_yoomoney_btn, callback_data="check_payment:yoomoney"),
         #  InlineKeyboardButton(text=change_yoomoney_btn, callback_data="change_payment:yoomoney"), ],
 

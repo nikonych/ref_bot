@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from database.db_commands import DBCommands
 from database.models.user import User
 from misc.states import UserState
-from utils.misc.kb_config import change_desc_btn, payments_btn, statistic_btn, users_btn, back_btn
+from utils.misc.kb_config import change_desc_btn, payments_btn, statistic_btn, users_btn, back_btn, change_action_btn
 
 
 async def admin_menu_handler(message: Message, state: FSMContext, session: AsyncSession):
@@ -15,6 +15,7 @@ async def admin_menu_handler(message: Message, state: FSMContext, session: Async
                                        keyboard=[
                                            [KeyboardButton(text=change_desc_btn), KeyboardButton(text=payments_btn)],
                                            [KeyboardButton(text=statistic_btn), KeyboardButton(text=users_btn)],
+                                           # [KeyboardButton(text=change_action_btn)],
                                            [KeyboardButton(text=back_btn)]
                                        ])
     await message.answer("Админ панель", reply_markup=markup)

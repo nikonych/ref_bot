@@ -3,6 +3,7 @@ from aiogram.filters import Text
 
 from utils.misc.kb_config import admin_btn, back_btn
 from .admin import admin_menu_handler
+from .change_action import change_action_router
 from .change_desc import change_desc_router
 from .change_img import change_img_router
 from .change_text import change_text_router
@@ -23,3 +24,4 @@ admin_router.include_router(change_url_router)
 admin_router.include_router(statistics_router)
 admin_router.include_router(users_router)
 admin_router.include_router(payments_router)
+admin_router.include_router(change_action_router)

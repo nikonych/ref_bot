@@ -18,7 +18,7 @@ async def about_us_handler(message: Message, state: FSMContext, session: AsyncSe
     user_id = message.from_user.id
     with open("database/settings.json", "r") as read_file:
         data = json.load(read_file)
-    img = FSInputFile('./images/help_img.jpg')
+    img = FSInputFile('./images/rule_img.jpg')
     await message.answer_photo(img, caption=data['about_us_text'])
 
 

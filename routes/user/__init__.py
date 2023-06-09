@@ -3,6 +3,7 @@ from aiogram.filters import CommandStart, Text
 
 from . import start
 from .about_us import about_us_router
+from .action import action_router
 from .help import help_router
 from .information import information_router
 # from .about import about_router
@@ -24,3 +25,4 @@ user_router.include_router(profile_router)
 user_router.include_router(help_router)
 user_router.include_router(information_router)
 user_router.include_router(about_us_router)
+user_router.include_router(action_router)

@@ -8,14 +8,14 @@ from utils.misc.kb_config import *
 async def get_channels_inl(bot):
     list = []
 
-    with open("database/settings.json", "r") as read_file:
-        data = json.load(read_file)
-    k = 1
-    for channel in data["channels"]:
-        link = await bot.create_chat_invite_link(chat_id=channel, name=f"Channel {k}")
-        list.append([InlineKeyboardButton(text=f"Channel {k}", url=f"{link.invite_link}")])
-        k += 1
-    list.append([InlineKeyboardButton(text="Подписался",callback_data=f"accept_license")])
+    # with open("database/settings.json", "r") as read_file:
+    #     data = json.load(read_file)
+    # k = 1
+    # for channel in data["channels"]:
+    #     link = await bot.create_chat_invite_link(chat_id=channel, name=f"Channel {k}")
+    #     list.append([InlineKeyboardButton(text=f"Channel {k}", url=f"{link.invite_link}")])
+    #     k += 1
+    list.append([InlineKeyboardButton(text="Соглашаюсь",callback_data=f"accept_license")])
     keyboard = InlineKeyboardMarkup(inline_keyboard=list)
     return keyboard
 

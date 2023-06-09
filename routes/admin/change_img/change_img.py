@@ -27,6 +27,10 @@ async def get_img(message: Message, state: FSMContext, session: AsyncSession, bo
             await bot.download(message.photo[-1].file_id, './images/help_img.jpg')
         case "rule":
             await bot.download(message.photo[-1].file_id, './images/rule_img.jpg')
+        case "info":
+            await bot.download(message.photo[-1].file_id, './images/info_img.jpg')
+        case "profile":
+            await bot.download(message.photo[-1].file_id, './images/profile_img.jpg')
     await message.answer("Успешно")
 
 

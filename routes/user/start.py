@@ -1,3 +1,4 @@
+import datetime
 import json
 from typing import Union
 
@@ -16,14 +17,13 @@ from keyboards.user_inline import get_channels_inl
 from keyboards.user_reply import get_menu_kb, get_accept_kb
 from utils.misc.kb_config import *
 
-async def back_to_start_handler(message: Message, state: FSMContext, session: AsyncSession, config: Config):
 
-    await start_handler(message, state, session, config)
-
-
+async def back_to_start_handler(message: Message, state: FSMContext, session: AsyncSession, config: Config, bot: Bot):
+    await start_handler(message, state, session, config, bot)
 
 
-async def start_handler(upd: Union[Message, CallbackQuery], state: FSMContext, session: AsyncSession, config: Config, bot: Bot):
+async def start_handler(upd: Union[Message, CallbackQuery], state: FSMContext, session: AsyncSession, config: Config,
+                        bot: Bot):
     await state.clear()
 
     user_id = upd.from_user.id
@@ -34,79 +34,62 @@ async def start_handler(upd: Union[Message, CallbackQuery], state: FSMContext, s
     if not user_db:
         await message.answer(data["license"], reply_markup=await get_channels_inl(bot))
         await DBCommands(User, session).add(user_id=user_id, user_name=upd.from_user.username)
-    elif not user_db.is_enabled:
+        if " " in message.text:
+            referrer_candidate = message.text.split()[1]
+            referrer = await DBCommands(User, session).get(user_id=referrer_candidate)
+            if user_id != referrer_candidate and referrer is not None:
+                if referrer.time_to_action is not None:
+                    if datetime.datetime.now() < referrer.time_to_action:
+                        referer_id = referrer_candidate
+                        await DBCommands(User, session).update(values=dict(referrer_id=referer_id),
+                                                               where=dict(user_id=user_id))
+                        # await DBCommands(User, session).update(values=dict(referrer_count=referrer.referrer_count + 1), where=dict(user_id=referrer.user_id))
+                        # await bot.send_message(chat_id=int(referer_id), text="У вас новый реферал!")
+    elif not user_db.is_enabled or user_db.accept_license is False:
         await message.answer(data["license"], reply_markup=await get_channels_inl(bot))
     else:
         markup = get_menu_kb()
 
-
         if user_id in config.tg_bot.admin_ids:
             markup.keyboard.append([KeyboardButton(text=admin_btn)])
 
         img = FSInputFile('./images/main_img.jpg')
         if "{0}" in data['main_text']:
-            await message.answer_photo(img, caption=data['main_text'].format(message.from_user.username), reply_markup=markup)
+            await message.answer_photo(img, caption=data['main_text'].format(message.from_user.username),
+                                       reply_markup=markup)
         else:
             await message.answer_photo(img, caption=data['main_text'], reply_markup=markup)
 
 
-
-
-
-async def accept_license_handler(call: CallbackQuery, state: FSMContext, session: AsyncSession, config: Config, bot: Bot):
+async def accept_license_handler(call: CallbackQuery, state: FSMContext, session: AsyncSession, config: Config,
+                                 bot: Bot):
     await state.clear()
-
+    #
     user_id = call.from_user.id
     with open("database/settings.json", "r") as read_file:
         data = json.load(read_file)
-    flag = False
-    for channel in data["channels"]:
-        channel = await bot.get_chat_member(chat_id=channel, user_id=user_id)
-        if channel.status == "left":
-            flag = True
-            break
-    if flag:
-        await call.answer("Пожалуйста подпишитесь на все группы!", reply_markup=await get_channels_inl(bot))
+    # flag = False
+    # for channel in data["channels"]:
+    #     channel = await bot.get_chat_member(chat_id=channel, user_id=user_id)
+    #     if channel.status == "left":
+    #         flag = True
+    #         break
+    # if flag:
+    #     await call.answer("Пожалуйста подпишитесь на все группы!", reply_markup=await get_channels_inl(bot))
+    # else:
+    await DBCommands(User, session).update(where=dict(user_id=user_id), values=dict(is_enabled=True, accept_license=True))
+    await call.message.delete()
+    markup = get_menu_kb()
+
+    if user_id in config.tg_bot.admin_ids:
+        markup.keyboard.append([KeyboardButton(text=admin_btn)])
+
+    img = FSInputFile('./images/main_img.jpg')
+    if "{0}" in data['main_text']:
+        await call.message.answer_photo(img, caption=data['main_text'].format(call.from_user.username),
+                                        reply_markup=markup)
     else:
-        await DBCommands(User, session).update(where=dict(user_id=user_id), values=dict(is_enabled=True))
-        await call.message.delete()
-        markup = get_menu_kb()
-
-
-        if user_id in config.tg_bot.admin_ids:
-            markup.keyboard.append([KeyboardButton(text=admin_btn)])
-
-        img = FSInputFile('./images/main_img.jpg')
-        if "{0}" in data['main_text']:
-            await call.message.answer_photo(img, caption=data['main_text'].format(call.from_user.username), reply_markup=markup)
-        else:
-            await call.message.answer_photo(img, caption=data['main_text'], reply_markup=markup)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        await call.message.answer_photo(img, caption=data['main_text'], reply_markup=markup)
 
 # import time
 # from datetime import datetime

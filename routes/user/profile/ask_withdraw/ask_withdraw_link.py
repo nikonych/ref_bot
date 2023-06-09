@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from requests.utils import default_headers
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from misc.states import TokenState, WithdrawState
+from misc.states import WithdrawState
 
 
 async def ask_withdraw_link_handler(message: Message, state: FSMContext, session: AsyncSession):

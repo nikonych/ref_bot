@@ -2,7 +2,10 @@ from dataclasses import dataclass
 
 from environs import Env
 
+
+from database.models.refill import Refill
 from database.models.user import User
+from database.models.withdraw import Withdraw
 
 
 @dataclass
@@ -40,4 +43,4 @@ def load_config(path: str = None):
     )
 
 
-TABLES = {'users': User}
+TABLES = {'users': User, "refills": Refill, "withdraws": Withdraw}

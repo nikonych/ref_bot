@@ -31,8 +31,8 @@ async def get_token_handler(message: Message, state: FSMContext, session: AsyncS
         data['payments']['lzt_token'] = token
         await message.answer("Введите секректное слово:")
         await state.set_state(PaymentState.secret)
-    elif type == "yoomoney":
-        data['payments']['yoomoney_token'] = token
+    elif type == "lava":
+        data['payments']['lava_token'] = token
         await message.answer("Успешно")
     write_settings = open("database/settings.json", "w")
     with write_settings as write_file:

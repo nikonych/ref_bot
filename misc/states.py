@@ -17,11 +17,19 @@ class ChangeState(StatesGroup):
     new_img = State()
     new_text = State()
     new_url = State()
+    new_action_name = State()
+    new_action_description = State()
+    new_action_price = State()
 
 class UserState(StatesGroup):
     user_id = State()
+    refill_count = State()
+
 
 class PaymentState(StatesGroup):
     token = State()
     number = State()
     secret = State()
+
+
+

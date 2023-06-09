@@ -3,21 +3,46 @@
     "-1001537742849"
   ],
   "license": "Please accept the terms of the license",
-  "main_text": "gg ttt {0}",
-  "help_text": "help_text",
+  "main_text": "\ud83d\udc4b \u0414\u043e\u0431\u0440\u043e \u043f\u043e\u0436\u0430\u043b\u043e\u0432\u0430\u0442\u044c {0}!!! \n\ud83d\udd17 \u041d\u0430\u0434\u0435\u044e\u0441\u044c \u043d\u0430\u0448 \u0431\u043e\u0442 \u043f\u0440\u0438\u043d\u0435\u0441\u0435\u0442 \u0432\u0430\u043c \u0444\u0438\u043d\u0430\u043d\u0441\u043e\u0432\u0443\u044e \u0440\u0430\u0434\u043e\u0441\u0442\u044c! \u0423\u0434\u0430\u0447\u043d\u043e\u0439 \u0440\u0430\u0431\u043e\u0442\u044b!",
+  "help_text": "support",
   "about_us_text": "about_us_text",
-  "information_text": "information_text",
-  "chat_url": "https://t.me/Syoneex",
-  "withdraw_url": "https://t.me/withdraw",
-  "news_url": "https://t.me/Syoneex",
+  "information_text": "information",
+  "chat_url": "https://t.me/world_of_money_chat",
+  "withdraw_url": "https://t.me/world_of_money_payments",
+  "news_url": "https://t.me/world_of_money_news",
   "instructions_url": "https://t.me/Syoneex",
   "rule_text": "<a href='https://twitter.com/jordanbpeterson'>Jordan B. Peterson</a>",
-  "chat_id": "-1001537742849",
+  "chat_id": "-880410602",
+  "withdraw_chat_id": "-1001904407871",
   "help_url": "https://t.me/Syoneex",
-  "rule_url": "https://github.com/",
+  "rule_url": "\u043f\u0430\u0432",
   "payments": {
     "qiwi_token": "8287f92e82ba8be26cbc5aab0f4b7ebb",
+    "qiwi_secret": "eyJ2ZXJzaW9uIjoiUDJQIiwiZGF0YSI6eyJwYXlpbl9tZXJjaGFudF9zaXRlX3VpZCI6InJjZzFydS0wMCIsInVzZXJfaWQiOiI3OTE0MTI3MTAzMCIsInNlY3JldCI6Ijg0NTcwMDZlYjY2MzU2MjBkMjAwM2MxZDVmNDZhYjdkN2QzMWMwNTllMjFmY2QzZDhhOTFiOTFlOTJmM2VkNjQifX0=",
     "lzt_token": "fb0d1bf2b22ef82636cec365f674182808f9ab1c",
+    "lzt_id": "8287f92e82ba8be26cbc5",
+    "lava_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI0NDEyYzE4Zi0xNzFlLTZkNWItNjM2Ny05OTBiZDc2MGZmNGIiLCJ0aWQiOiIwMzgwNGJjNi04NjFkLTI3OGItZGFkNC1mZDM1Mzk3ZmM2N2UifQ.SsXHwY46GSIUhXQ5x2N5Av65fBQii85UtMeirpfT7cA",
     "lzt_secret": "\u041f\u0440\u043e\u0433\u0440\u0430\u043c\u043c\u0438\u0441\u0442\u043e\u043c"
-  }
+  },
+  "actions": [
+    {
+      "name": "gg",
+      "description": "Day of the week",
+      "price": 500,
+      "duration": "day"
+    },
+    {
+      "name": "week",
+      "description": "Week of the month",
+      "price": 200,
+      "duration": "week"
+    },
+    {
+      "name": "vtgfd",
+      "description": "gfdsgfds",
+      "price": 300,
+      "duration": "month"
+    }
+  ],
+  "action_text": "action_text"
 }

@@ -20,14 +20,14 @@ async def information_handler(message: Message, state: FSMContext, session: Asyn
         data = json.load(read_file)
     user_db = await DBCommands(User, session).get(user_id=user_id)
     inline_keyboard = [
-        [InlineKeyboardButton(text=data["chat_url"], url=data['chat_url']),
+        [InlineKeyboardButton(text="✉️ Чат пользователей", url=data['chat_url']),
          ],
-        [InlineKeyboardButton(text=data["withdraw_url"], url=data['withdraw_url'])],
-        [InlineKeyboardButton(text=data["news_url"], url=data['news_url'])],
-        [InlineKeyboardButton(text=data["instructions_url"], url=data['instructions_url'])]
+        [InlineKeyboardButton(text="💳 Выплаты", url=data['withdraw_url'])],
+        [InlineKeyboardButton(text="🆕 Канал с Новостями", url=data['news_url'])],
+        # [InlineKeyboardButton(text=data["instructions_url"], url=data['instructions_url'])]
     ]
     keyboard = InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
-    img = FSInputFile('./images/help_img.jpg')
+    img = FSInputFile('./images/info_img.jpg')
     await message.answer_photo(img, caption=data['information_text'], reply_markup=keyboard)
 
 

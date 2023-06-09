@@ -12,6 +12,7 @@ from middlewares.config import ConfigMiddleware
 from middlewares.db import DBSessionMiddleware
 from middlewares.remove_keyboard_markup import RemoveKeyboardMarkupMiddleware
 from middlewares.throttling import ThrottlingMiddleware
+from misc.services import run_services
 # from misc.bot_commands import set_commands
 # from misc.services import run_services
 from routes import register_all_routes
@@ -36,7 +37,7 @@ async def main():
     # bot = Bot(token=config.tg_bot.token, parse_mode='HTML', session=session)
     bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
 
-    # await run_services(bot, config, session_pool)
+    # await run_services(session_pool)
 
     # storage = RedisStorage.from_url(f"redis://{config.redis.host}:{config.redis.port}") if config.tg_bot.use_redis else MemoryStorage()
     dp = Dispatcher(storage=MemoryStorage())

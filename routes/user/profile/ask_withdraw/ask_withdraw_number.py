@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from misc.states import TokenState, WithdrawState
+from misc.states import WithdrawState
 
 
 async def ask_withdraw_number_handler(message: Message, state: FSMContext, session: AsyncSession):

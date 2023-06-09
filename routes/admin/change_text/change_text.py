@@ -28,7 +28,11 @@ async def get_text(message: Message, state: FSMContext, session: AsyncSession, b
         case "help":
             data['help_text'] = message.text
         case "rule":
-            data['rule_text'] = message.text
+            data['about_us_text'] = message.text
+        case "info":
+            data['information_text'] = message.text
+        case "license":
+            data['license'] = message.text
     write_settings = open("database/settings.json", "w")
     with write_settings as write_file:
         json.dump(data, write_file)
