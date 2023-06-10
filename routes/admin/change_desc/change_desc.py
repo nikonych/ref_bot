@@ -3,7 +3,7 @@ from aiogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 from sqlalchemy.ext.asyncio import AsyncSession
 from utils.misc.kb_config import change_rule_url_btn, change_rule_img_btn, change_rule_text_btn, change_help_img_btn, \
     change_help_text_btn, change_help_user_btn, change_main_img_btn, change_main_text_btn, change_info_img_btn, \
-    change_info_text_btn, change_profile_img_btn, change_license_btn
+    change_info_text_btn, change_profile_img_btn, change_license_btn, change_action_btn, change_action_text_btn
 
 
 async def change_desc_handler(message: Message, state: FSMContext, session: AsyncSession):
@@ -15,7 +15,7 @@ async def change_desc_handler(message: Message, state: FSMContext, session: Asyn
         [InlineKeyboardButton(text=change_info_img_btn, callback_data=f"change_img:info"), InlineKeyboardButton(text=change_info_text_btn, callback_data=f"change_text:info")],
         # [InlineKeyboardButton(text=change_help_user_btn, callback_data=f"change_url:user"), InlineKeyboardButton(text=change_rule_url_btn, callback_data=f"change_url:rule")]
         [InlineKeyboardButton(text=change_help_user_btn, callback_data=f"change_url:user"), InlineKeyboardButton(text=change_profile_img_btn, callback_data=f"change_img:profile")],
-        [InlineKeyboardButton(text=change_license_btn, callback_data=f"change_text:license")]
+        [InlineKeyboardButton(text=change_license_btn, callback_data=f"change_text:license"),InlineKeyboardButton(text=change_action_text_btn, callback_data=f"change_text:action")]
     ]
     keyboard = InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
     await message.answer(".", reply_markup=keyboard)
