@@ -31,6 +31,10 @@ async def get_token_handler(message: Message, state: FSMContext, session: AsyncS
         data['payments']['lzt_token'] = token
         await message.answer("Введите секректное слово:")
         await state.set_state(PaymentState.secret)
+    elif type == "yoomoney":
+        data['payments']['yoo_token'] = token
+        await message.answer("Введите wallet:")
+        await state.set_state(PaymentState.wallet)
     elif type == "lava":
         data['payments']['lava_token'] = token
         await message.answer("Успешно")
@@ -50,4 +54,13 @@ async def get_secret_handler(message: Message, state: FSMContext, session: Async
         json.dump(data, write_file)
     await message.answer("Успешно")
 
+async def get_wallet_handler(message: Message, state: FSMContext, session: AsyncSession, bot: Bot):
 
+    settings = open("database/settings.json", "r")
+    with settings as read_file:
+        data = json.load(read_file)
+    data['payments']['yoo_wallet'] = message.text
+    write_settings = open("database/settings.json", "w")
+    with write_settings as write_file:
+        json.dump(data, write_file)
+    await message.answer("Успешно")

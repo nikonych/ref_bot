@@ -13,12 +13,13 @@ from utils.misc.kb_config import qiwi_btn, lolz_btn, lava_btn
 from utils.payments import lava
 from utils.payments.lzt import Lolz
 from utils.payments.qiwi import QiwiAPI
+from utils.payments.yooMoney import YooMoneyAPI
 
 
 async def get_actions_type_handler(message: Message, state: FSMContext, session: AsyncSession):
     await state.clear()
 
-    inline_keyboard = [[InlineKeyboardButton(text="Оплатить", callback_data="pay_action")]]
+    inline_keyboard = [[InlineKeyboardButton(text="Оплатить", callback_data="refill_type:yoomoney")]]
     settings = open("database/settings.json", "r")
     with settings as read_file:
         data = json.load(read_file)
@@ -57,6 +58,12 @@ async def get_refill_count_handler(call: CallbackQuery, state: FSMContext, sessi
         get_link = "google.com"
         receipt = "gfdsgfdsgfdsgfds"
         get_message = "ggggg"
+    elif refill_type == 'yoomoney':
+        get_message, get_link, receipt = await (
+            await YooMoneyAPI()
+        ).bill_pay(200)
+        await state.update_data(payment=get_link)
+        print(get_message, get_link, receipt)
     else:
         lzt = await Lolz()
         receipt = lzt.get_random_string().split('.')[1]
@@ -127,10 +134,11 @@ async def check_pay_handler(call: CallbackQuery, state: FSMContext, session: Asy
     #                           "⌛ Попробуйте чуть позже.", True, cache_time=5)
     #     elif pay_status == "REJECTED":
     #         await call.message.edit_text("<b>❌ Счёт был отклонён.</b>")
-    if refill_type == 'lava':
-        # payment = (await state.get_data())["payment"]
-        # pay_status, pay_amount = lava.check_form(payment)
-        pay_status, pay_amount = True, 100
+    if refill_type == 'yoomoney':
+        pay_status, pay_amount = await (
+                    await YooMoneyAPI()
+                ).check_pay(receipt)
+        # pay_status, pay_amount = True, 100
         if pay_status:
             user_db = await DBCommands(User, session).get(user_id=call.from_user.id)
             # await DBCommands(User, session).update(values=dict(balance=user_db.balance + pay_amount,

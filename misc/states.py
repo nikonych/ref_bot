@@ -30,6 +30,7 @@ class PaymentState(StatesGroup):
     token = State()
     number = State()
     secret = State()
+    wallet = State()
 
 
 
