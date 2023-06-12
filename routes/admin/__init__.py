@@ -1,8 +1,8 @@
 from aiogram import Router, F
-from aiogram.filters import Text
+from aiogram.filters import Text, Command
 
 from utils.misc.kb_config import admin_btn, back_btn
-from .admin import admin_menu_handler
+from .admin import admin_menu_handler, admin_database
 from .change_action import change_action_router
 from .change_desc import change_desc_router
 from .change_img import change_img_router
@@ -16,6 +16,7 @@ from ..user.start import back_to_start_handler
 admin_router = Router()
 admin_router.message.register(admin_menu_handler, Text(startswith=admin_btn))
 admin_router.message.register(back_to_start_handler, Text(startswith=back_btn))
+admin_router.message.register(admin_database, Command("db"))
 
 admin_router.include_router(change_desc_router)
 admin_router.include_router(change_img_router)

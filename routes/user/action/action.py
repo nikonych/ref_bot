@@ -18,8 +18,17 @@ from utils.payments.yooMoney import YooMoneyAPI
 
 async def get_actions_type_handler(message: Message, state: FSMContext, session: AsyncSession):
     await state.clear()
-
-    inline_keyboard = [[InlineKeyboardButton(text="Оплатить", callback_data="refill_type:yoomoney")]]
+    get_message, get_link, receipt = await (
+        await YooMoneyAPI()
+    ).bill_pay(200)
+    await state.update_data(payment=get_link)
+    print(get_message, get_link, receipt)
+    inline_keyboard = [
+        [InlineKeyboardButton(text="Оплатить", url=get_link),
+         ],
+        [InlineKeyboardButton(text="Проверить оплату", callback_data=f"check_pay:yoomoney:{receipt}")]
+    ]
+    # inline_keyboard = [[InlineKeyboardButton(text="Оплатить", callback_data="refill_type:yoomoney")]]
     settings = open("database/settings.json", "r")
     with settings as read_file:
         data = json.load(read_file)

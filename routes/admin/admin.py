@@ -1,6 +1,8 @@
+import datetime
+
 from aiogram import types
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, KeyboardButton, CallbackQuery
+from aiogram.types import Message, KeyboardButton, CallbackQuery, FSInputFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.db_commands import DBCommands
@@ -21,6 +23,13 @@ async def admin_menu_handler(message: Message, state: FSMContext, session: Async
     await message.answer("Админ панель", reply_markup=markup)
 
 
+async def admin_database(message: Message, state: FSMContext):
+    await state.clear()
+    database = FSInputFile('database/database.db')
+    await message.answer_document(database,
+                                  caption=f"<b>📦 BACKUP</b>\n"
+                                          f"<code>🕰 {datetime.datetime.now()}</code>")
 
-
-
+    await message.answer_document(FSInputFile('database/settings.json'),
+                                  caption=f"<b>📦 BACKUP</b>\n"
+                                          f"<code>🕰 {datetime.datetime.now()}</code>")

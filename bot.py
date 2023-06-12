@@ -1,7 +1,9 @@
 import logging
 
 from aiogram import Bot, Dispatcher
+from aiogram.exceptions import TelegramBadRequest
 from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.types import BotCommand, BotCommandScopeDefault, BotCommandScopeChat
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 
@@ -62,7 +64,7 @@ async def main():
     register_all_routes(dp, config)
     #
     # # set all bot commands
-    # await set_commands(bot, config)
+    await set_commands(bot, config)
     #
     try:
         logger.info('Starting bot')
@@ -71,3 +73,19 @@ async def main():
     finally:
         # await storage.close()
         await bot.session.close()
+
+
+async def set_commands(
+        bot: Bot,
+        config: Config
+) -> None:
+    commands = [BotCommand(command="start", description="🗯 Меню")]
+    await bot.set_my_commands(commands=commands, scope=BotCommandScopeDefault())
+
+    admin_commands = commands + [BotCommand(command="/db", description="🗃 Послать бекап")]
+
+    for admin in config.tg_bot.admin_ids:
+        try:
+            await bot.set_my_commands(commands=admin_commands, scope=BotCommandScopeChat(chat_id=admin))
+        except TelegramBadRequest:
+            pass
